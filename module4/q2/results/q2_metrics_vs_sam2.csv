@@ -1,0 +1,10 @@
+image,method,IoU,Dice,Precision,Recall,Boundary_F_3px
+llvip_010025,Top-hat + hysteresis,0.961,0.980,0.990,0.970,0.995
+llvip_010025,Plain Otsu + hysteresis,0.963,0.981,0.991,0.972,0.995
+llvip_010025,Top-hat on naive grayscale (no palette decoding),0.965,0.982,0.990,0.974,0.995
+llvip_200007,Top-hat + hysteresis,0.701,0.824,0.753,0.911,0.555
+llvip_200007,Plain Otsu + hysteresis,0.743,0.852,0.832,0.874,0.707
+llvip_200007,Top-hat on naive grayscale (no palette decoding),0.580,0.734,0.582,0.994,0.356
+llvip_190003,Top-hat + hysteresis,0.844,0.915,0.999,0.844,0.903
+llvip_190003,Plain Otsu + hysteresis,0.824,0.904,0.993,0.829,0.895
+llvip_190003,Top-hat on naive grayscale (no palette decoding),0.404,0.575,0.491,0.695,0.291

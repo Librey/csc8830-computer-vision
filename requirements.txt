@@ -1,0 +1,9 @@
+# Web app (all modules)
+streamlit>=1.40
+numpy>=1.24
+pandas>=2.0
+# Module 3
+scipy>=1.10
+Pillow>=10.0
+# Module 4
+opencv-python-headless>=4.8

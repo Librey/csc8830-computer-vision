@@ -1,3 +1,10 @@
 __pycache__/
 *.pyc
 .venv/
+venv/
+results_q1/
+results_q2/
+*.aux
+*.log
+*.out
+.DS_Store

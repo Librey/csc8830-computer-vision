@@ -7,9 +7,11 @@ Image blurring with a box or Gaussian filter, done two ways:
 
 The web app shows both results side by side. They match to within floating-point rounding (about 1e-12), which is the convolution theorem: convolution in space equals multiplication in frequency.
 
-Repo: https://github.com/Librey/cv-module3-blur
+Repo: https://github.com/Librey/csc8830-computer-vision (this module lives in `module3/`)
 
 ## Setup
+
+Run every command below from inside this folder (`cd module3`).
 
 Requires Python 3.9 or newer.
 
