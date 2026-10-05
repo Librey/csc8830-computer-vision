@@ -1,4 +1,4 @@
-# CSc 8830 Computer Vision: Assignments
+﻿# CSc 8830 Computer Vision: Assignments
 
 **Author:** Liberty Ikpeogu
 
@@ -12,6 +12,7 @@ the module folders, so the app and the command line give identical results.
 |---|---|---|
 | 3 | [`module3/`](module3/) | Box and Gaussian blur by direct convolution and by FFT |
 | 4 | [`module4/`](module4/) | Human boundaries in RGB and thermal images; Fourier-domain edges and segmentation |
+| 6 | [`module6/`](module6/) | Optical flow, Lucas-Kanade tracking, structure from motion of a planar object |
 
 ## Run the web app
 

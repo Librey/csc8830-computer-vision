@@ -1,0 +1,103 @@
+[K] f_full = 24 * 5040.0 / 43.27 = 2795.7 px at 3024x4032; scaled to 1932x2576: f = 1786.1 px
+[K]
+[[1786.1346    0.      966.    ]
+ [   0.     1786.1346 1288.    ]
+ [   0.        0.        1.    ]]
+[corners] view1 [[106.95999908447266, 107.56999969482422], [1724.760009765625, 115.19999694824219], [1726.81005859375, 2313.14990234375], [130.25, 2340.6298828125]] line-fit median residuals px [0.5, 0.56, 1.07, 0.87]
+[H] view1->view2_sideways: 219 ratio-test matches, 91 RANSAC inliers, transfer error median 1.32 px
+[H]
+[[   0.1887   -0.4942 1197.7602]
+ [   0.2842    0.1108  559.1943]
+ [  -0.0001   -0.0001    1.    ]]
+[corners] view2_sideways [[1186.800048828125, 612.8800048828125], [1720.5, 1246.280029296875], [588.2999877929688, 2020.050048828125], [84.97000122070312, 1109.8199462890625]]
+[H] view1->view3_spine: 166 ratio-test matches, 36 RANSAC inliers, transfer error median 1.39 px
+[H]
+[[  0.4996   0.4339 -13.3649]
+ [ -0.2622   0.1787 938.6651]
+ [  0.0001  -0.0001   1.    ]]
+[corners] view3_spine [[86.55999755859375, 927.8099975585938], [735.0499877929688, 414.8500061035156], [1912.8199462890625, 928.1500244140625], [1427.6199951171875, 1769.1199951171875]]
+[H] view1->view4_front: 190 ratio-test matches, 46 RANSAC inliers, transfer error median 2.00 px
+[H]
+[[  0.5646  -0.181  368.7744]
+ [  0.0244   0.16   694.7626]
+ [  0.      -0.0002   1.    ]]
+[corners] view4_front [[418.57000732421875, 730.0499877929688], [1333.22998046875, 761.780029296875], [1715.4599609375, 2052.669921875], [36.04999923706055, 2063.7099609375]]
+[decomp] candidates kept per view: [2, 2, 1]
+[decomp] view2_sideways: n = [-0.0138 -0.0316  0.9994], t/d = [ 0.0857 -0.4747  0.747 ], rotation angle 62.9 deg
+[decomp] R =
+[[ 0.5471 -0.828  -0.1226]
+ [ 0.7884  0.4605  0.408 ]
+ [-0.2814 -0.3198  0.9047]]
+[decomp] view3_spine: n = [-0.0673 -0.0248  0.9974], t/d = [ 0.0496 -0.8073  0.6303], rotation angle 63.3 deg
+[decomp] R =
+[[ 0.5607  0.8279  0.017 ]
+ [-0.7182  0.476   0.5075]
+ [ 0.412  -0.2967  0.8615]]
+[decomp] view4_front: n = [-0.0347 -0.0105  0.9993], t/d = [-0.0011 -0.6884  0.5806], rotation angle 41.0 deg
+[decomp] R =
+[[ 0.9988  0.0318 -0.0362]
+ [-0.0004  0.756   0.6545]
+ [ 0.0482 -0.6538  0.7552]]
+[decomp] plane normal in camera-1 frame (mean) n = [-0.0386 -0.0223  0.999 ], spread of the three normals 3.89 deg-ish (sum of chord lengths)
+[triangulate] TL design matrix A (8x4), rows = x*p3 - p1, y*p3 - p2 per view:
+[[-1786.1346     0.      -859.0429     0.    ]
+ [    0.     -1786.1346 -1180.433      0.    ]
+ [-1039.3128  1408.3854   418.6972    11.9076]
+ [-1218.1503  -606.5503 -1339.5045   343.5345]
+ [-1363.7959 -1217.6941  -788.0173  -642.947 ]
+ [ 1134.4901  -743.3751 -1216.6919  1214.8951]
+ [-1810.4453   301.0352  -348.7494  -315.7831]
+ [  -26.2202  -985.5885 -1590.4436   905.6704]]
+[triangulate] corners (units of d):
+[[-0.4621 -0.6349  0.9634]
+ [ 0.423  -0.6584  1.004 ]
+ [ 0.436   0.5911  1.0302]
+ [-0.4613  0.5863  0.9899]]
+[triangulate] reprojection error px (rows views, cols TL TR BR BL):
+[[ 4.12  6.42  4.97  6.31]
+ [ 0.88  6.36  3.41 11.71]
+ [ 6.63  3.2  13.28  9.08]
+ [ 7.57  4.28 13.42  5.06]]
+[BA] 362 observations, 177 points, 549 parameters
+[BA] reprojection error before: mean 0.82 px, max 13.42 px; after: mean 0.74 px, max 10.16 px
+[BA] corners (units of camera-1 plane distance):
+[[-0.4662 -0.6404  0.9701]
+ [ 0.4242 -0.6586  1.0016]
+ [ 0.4364  0.592   1.0294]
+ [-0.4646  0.5881  0.9957]]
+[BA] corner reprojection error px (rows views, cols TL TR BR BL):
+[[ 1.51  2.9   4.19  3.29]
+ [ 2.98  4.35  3.4   8.21]
+ [ 3.3   6.98 10.16  4.96]
+ [ 3.98  4.74  2.47  0.93]]
+[BA] view2_sideways: R =
+[[ 0.5499 -0.826  -0.1242]
+ [ 0.7872  0.4628  0.4076]
+ [-0.2792 -0.3219  0.9047]]
+ t = [ 0.0875 -0.4749  0.7466]
+[BA] view3_spine: R =
+[[ 0.5656  0.8246  0.0104]
+ [-0.7062  0.4777  0.5225]
+ [ 0.4259 -0.3029  0.8526]]
+ t = [ 0.0573 -0.826   0.643 ]
+[BA] view4_front: R =
+[[ 0.9989  0.0323 -0.0346]
+ [-0.0014  0.7508  0.6606]
+ [ 0.0473 -0.6598  0.75  ]]
+ t = [-0.0028 -0.6978  0.59  ]
+[metric] scale s = 14.5 / 0.89639 = 16.176 cm per unit; camera-1 to plane distance d = 16.18 cm
+[metric] sides TL-TR, TR-BR, BR-BL, BL-TL (cm): [14.42, 20.24, 14.58, 19.88]
+[metric] length error vs 20 cm: +0.06 cm (+0.3%)
+[metric] diagonals (cm): [24.73, 24.77], expected 24.70
+[metric] corner angles (deg): [91.05, 89.43, 89.14, 90.37]
+[metric] corner distance from best-fit plane (cm): [0.006, 0.006, 0.005, 0.006]
+[surface] 173 SIFT points; distance from corner plane: median 0.057 cm, 90th pct 0.117 cm
+[book frame] corners (cm): [[-0.13, 19.88, 0.0], [14.28, 20.23, 0.02], [14.58, 0.0, 0.0], [0.0, 0.0, 0.0]]
+[camera] view1_overhead: position (x, y, z) = [6.9, 9.9, 16.2] cm, distance to cover centre 16.2 cm, tilt from straight down 2.4 deg
+[camera] view2_sideways: position (x, y, z) = [15.3, 1.5, 24.3] cm, distance to cover centre 27.0 cm, tilt from straight down 22.9 deg
+[camera] view3_spine: position (x, y, z) = [-7.5, 1.1, 17.7] cm, distance to cover centre 24.7 cm, tilt from straight down 32.6 deg
+[camera] view4_front: position (x, y, z) = [6.5, -4.9, 16.2] cm, distance to cover centre 22.0 cm, tilt from straight down 40.4 deg
+[f check] view1_overhead: f from rectangle = [5070.0] px (K uses 1786)
+[f check] view2_sideways: f from rectangle = [1705.0, 1065.0] px (K uses 1786)
+[f check] view3_spine: f from rectangle = [1880.0, 2748.0] px (K uses 1786)
+[f check] view4_front: f from rectangle = [2102.0, 1787.0] px (K uses 1786)
