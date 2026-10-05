@@ -1,12 +1,12 @@
-[fig1] traffic t=20.0s: moving pixels 4.15%, moving regions (area>=40px) 16
-[fig2] traffic left half: median direction 157.6 deg, mean speed 2.99 px/frame, n=14040
-[fig2] traffic right half: median direction -71.4 deg, mean speed 1.39 px/frame, n=7637
+[fig1] traffic t=20.0s: moving pixels 4.15%, moving regions (area>=40px) 14
+[fig2] traffic left half: median direction 157.6 deg, mean speed 2.98 px/frame, n=14009
+[fig2] traffic right half: median direction -71.7 deg, mean speed 1.39 px/frame, n=7672
 [fig3] driving t=25.0s: image 640x360, FOE=(358.6,175.4), 98.6% of vectors point away from FOE; FOE over 14 pairs: mean (309.8,182.6), std (44.1,6.9)
 [fig4] driving region 'sky': mean speed 0.074 px/frame
 [fig4] driving region 'far mountains': mean speed 0.136 px/frame
 [fig4] driving region 'near roadside (left)': mean speed 11.159 px/frame
 [fig4] driving region 'near roadside (right)': mean speed 4.538 px/frame
 [fig4] driving region 'dashboard': mean speed 0.422 px/frame
-[fig5] Traffic_static_shot: mean speed 0.160 (min 0.089, max 0.304) px/frame; moving pixels 3.89% (min 1.11, max 6.17)
+[fig5] Traffic_static_shot: mean speed 0.160 (min 0.090, max 0.306) px/frame; moving pixels 3.89% (min 1.10, max 6.20)
 [fig5] Driving_pov: mean speed 1.616 (min 0.662, max 3.994) px/frame; moving pixels 17.74% (min 12.67, max 28.23)
 [fig6] centre strip over 14 pairs: dash 3.08 px/frame, asphalt 0.78 px/frame; asphalt lower in 13/14 pairs; sky mean speed 0.074

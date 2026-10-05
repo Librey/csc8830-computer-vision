@@ -1,3 +1,6 @@
 # input and output videos are too large for git; keep them locally
 *.mp4
 *.mov
+
+# sample clips for the web app are small enough to keep
+!web_samples/*.mp4

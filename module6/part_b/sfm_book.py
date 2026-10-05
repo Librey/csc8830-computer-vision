@@ -28,6 +28,7 @@ Requirements
 
 Usage
     python sfm_book.py --images images --out results
+    python sfm_book.py --images images --out results --f_eq 26   # try another focal length
 """
 
 import argparse
@@ -159,13 +160,27 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--images", default="images")
     ap.add_argument("--out", default="results")
+    ap.add_argument("--f_eq", type=float, default=24.0, help="35 mm-equivalent focal length")
+    ap.add_argument("--width", type=float, default=14.5, help="cover width TL-TR in cm")
+    ap.add_argument("--length", type=float, default=20.0, help="cover length TR-BR in cm")
     args = ap.parse_args()
-    os.makedirs(args.out, exist_ok=True)
-    out = open(os.path.join(args.out, "results.txt"), "w")
-    def log(*a):
-        s = " ".join(str(x) for x in a); print(s); out.write(s + "\n")
+    run(args.images, args.out, args.f_eq, args.width, args.length)
 
-    imgs = [cv2.imread(os.path.join(args.images, v + ".jpeg")) for v in VIEWS]
+
+def run(images, out_dir, f_eq=24.0, width=14.5, length=20.0, verbose=True):
+    """Full pipeline. Writes results.txt and the three figures to out_dir and
+    returns the key numbers as a dict (used by the web app)."""
+    global F_EQ, W_CM, L_CM
+    F_EQ, W_CM, L_CM = f_eq, width, length
+    os.makedirs(out_dir, exist_ok=True)
+    out = open(os.path.join(out_dir, "results.txt"), "w")
+    def log(*a):
+        s = " ".join(str(x) for x in a)
+        if verbose:
+            print(s)
+        out.write(s + "\n")
+
+    imgs = [cv2.imread(os.path.join(images, v + ".jpeg")) for v in VIEWS]
     gray = [cv2.cvtColor(i, cv2.COLOR_BGR2GRAY) for i in imgs]
     h, w = gray[0].shape
     K, f_full = intrinsics(w, h)
@@ -206,7 +221,7 @@ def main():
         for a, b in zip(p1[inl][::2], p2[inl][::2]):
             axs[j - 1].plot([a[0] / 4, b[0] / 4 + w / 4], [a[1] / 4, b[1] / 4], lw=0.6)
         axs[j - 1].set_title(f"view 1 <-> view {j+1}: {inl.sum()} inliers"); axs[j - 1].axis("off")
-    plt.tight_layout(); plt.savefig(os.path.join(args.out, "fig_matches.png"), dpi=110); plt.close()
+    plt.tight_layout(); plt.savefig(os.path.join(out_dir, "fig_matches.png"), dpi=110); plt.close()
 
     # ---- decompose each homography; pick the normal consistent across the 3 views
     cands = {j: choose_decomposition(Hs[j], K, matches[j][0]) for j in (1, 2, 3)}
@@ -370,7 +385,7 @@ def main():
         for k in range(4):
             axs[j].text(corners[j][k, 0], corners[j][k, 1], NAMES[k], color="yellow", fontsize=10)
         axs[j].set_title(f"view {j+1}: max reproj {reproj[j].max():.2f} px"); axs[j].axis("off")
-    plt.tight_layout(); plt.savefig(os.path.join(args.out, "fig_corners.png"), dpi=110); plt.close()
+    plt.tight_layout(); plt.savefig(os.path.join(out_dir, "fig_corners.png"), dpi=110); plt.close()
 
     # ---- figure: 3D reconstruction in the book frame
     fig = plt.figure(figsize=(13, 6))
@@ -394,8 +409,16 @@ def main():
     ax2.scatter(sb[:, 0], sb[:, 1], s=2, c="gray")
     ax2.set_aspect("equal"); ax2.legend(fontsize=8, loc="lower right")
     ax2.set_xlabel("x (cm)"); ax2.set_ylabel("y (cm)"); ax2.set_title("Top view of the recovered plane")
-    plt.tight_layout(); plt.savefig(os.path.join(args.out, "fig_3d.png"), dpi=120); plt.close()
+    plt.tight_layout(); plt.savefig(os.path.join(out_dir, "fig_3d.png"), dpi=120); plt.close()
     out.close()
+    return dict(K=K, f_px=float(K[0, 0]), scale_cm=float(s), sides=[float(v) for v in sides],
+                diagonals=[float(v) for v in diag], angles=[float(v) for v in angs],
+                reproj_mean=float(e1.mean()), reproj_max=float(e1.max()),
+                reproj_before_max=float(e0.max()), corners_px={j: corners[j] for j in range(4)},
+                corners_cm=to_book(Xc), cameras=[dict(view=VIEWS[j], position=c[0], tilt=float(c[2]),
+                                                       distance=float(c[3])) for j, c in enumerate(cams)],
+                surface_median_cm=float(np.median(np.abs(dsurf))), n_surface=len(surf),
+                inliers={VIEWS[j]: len(matches[j][0]) for j in (1, 2, 3)})
 
 
 if __name__ == "__main__":

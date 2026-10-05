@@ -164,6 +164,52 @@ def worked_example(I, J, p, f):
                 det=det, u=u, v=v, lam=lam)
 
 
+# ---------------------------------------------------------------- reusable core
+def validate_pair(A, B, n=6, moving_only=False, min_rows=0.0, max_rows=1.0):
+    """Track Shi-Tomasi corners from frame A to frame B (BGR, already scaled) three
+    ways. Returns (rows, I, J): one dict per point plus the float grey frames."""
+    I = cv2.cvtColor(A, cv2.COLOR_BGR2GRAY).astype(np.float32)
+    J = cv2.cvtColor(B, cv2.COLOR_BGR2GRAY).astype(np.float32)
+    H, W = I.shape
+
+    # candidate corners (Shi-Tomasi), away from borders
+    mask = np.zeros((H, W), np.uint8)
+    mask[max(40, int(min_rows * H)):int(max_rows * H) - 40, 40:W - 40] = 255
+    if moving_only:
+        flow = cv2.calcOpticalFlowFarneback(I.astype(np.uint8), J.astype(np.uint8),
+                                            None, 0.5, 3, 15, 3, 5, 1.2, 0)
+        moving = (np.linalg.norm(flow, axis=2) > 1.0).astype(np.uint8) * 255
+        mask = cv2.bitwise_and(mask, moving)
+    pts = cv2.goodFeaturesToTrack(I.astype(np.uint8), n, 0.05, 25, mask=mask,
+                                  blockSize=7)
+    if pts is None:
+        return [], I, J
+    pts = pts.reshape(-1, 2)
+
+    # OpenCV reference
+    cv_p, st, _ = cv2.calcOpticalFlowPyrLK(I.astype(np.uint8), J.astype(np.uint8),
+                                           pts.astype(np.float32), None,
+                                           winSize=(15, 15), maxLevel=2)
+
+    rows = []
+    for i, p in enumerate(pts):
+        d, hist, G = my_lk(I, J, p)
+        mine = p + d
+        meas, score = measured_location(I, J, p)
+        if meas is None:
+            continue
+        lam = np.linalg.eigvalsh(G)
+        rows.append(dict(id=len(rows) + 1, x=float(p[0]), y=float(p[1]),
+                         my_x=float(mine[0]), my_y=float(mine[1]),
+                         my_dx=float(d[0]), my_dy=float(d[1]),
+                         iters=len(hist), lam2=float(lam[0]),
+                         cv_x=float(cv_p[i, 0]), cv_y=float(cv_p[i, 1]),
+                         meas_x=float(meas[0]), meas_y=float(meas[1]), ncc=float(score),
+                         err_meas=float(np.hypot(*(mine - meas))),
+                         err_cv=float(np.hypot(*(mine - cv_p[i])))))
+    return rows, I, J
+
+
 # ---------------------------------------------------------------- main
 def main():
     ap = argparse.ArgumentParser()
@@ -189,42 +235,10 @@ def main():
     cap.release()
     A = cv2.resize(A, None, fx=SCALE, fy=SCALE)
     B = cv2.resize(B, None, fx=SCALE, fy=SCALE)
-    I = cv2.cvtColor(A, cv2.COLOR_BGR2GRAY).astype(np.float32)
-    J = cv2.cvtColor(B, cv2.COLOR_BGR2GRAY).astype(np.float32)
+    rows, I, J = validate_pair(A, B, args.n, args.moving_only, args.min_rows, args.max_rows)
     H, W = I.shape
-
-    # candidate corners (Shi-Tomasi), away from borders
-    mask = np.zeros((H, W), np.uint8)
-    mask[max(40, int(args.min_rows * H)):int(args.max_rows * H) - 40, 40:W - 40] = 255
-    if args.moving_only:
-        flow = cv2.calcOpticalFlowFarneback(I.astype(np.uint8), J.astype(np.uint8),
-                                            None, 0.5, 3, 15, 3, 5, 1.2, 0)
-        moving = (np.linalg.norm(flow, axis=2) > 1.0).astype(np.uint8) * 255
-        mask = cv2.bitwise_and(mask, moving)
-    pts = cv2.goodFeaturesToTrack(I.astype(np.uint8), args.n, 0.05, 25, mask=mask,
-                                  blockSize=7)
-    pts = pts.reshape(-1, 2)
-
-    # OpenCV reference
-    cv_p, st, _ = cv2.calcOpticalFlowPyrLK(I.astype(np.uint8), J.astype(np.uint8),
-                                           pts.astype(np.float32), None,
-                                           winSize=(15, 15), maxLevel=2)
-
-    rows = []
-    for i, p in enumerate(pts):
-        d, hist, G = my_lk(I, J, p)
-        mine = p + d
-        meas, score = measured_location(I, J, p)
-        if meas is None:
-            continue
-        lam = np.linalg.eigvalsh(G)
-        rows.append(dict(id=len(rows) + 1, x=p[0], y=p[1],
-                         my_x=mine[0], my_y=mine[1], my_dx=d[0], my_dy=d[1],
-                         iters=len(hist), lam2=lam[0],
-                         cv_x=cv_p[i, 0], cv_y=cv_p[i, 1],
-                         meas_x=meas[0], meas_y=meas[1], ncc=score,
-                         err_meas=float(np.hypot(*(mine - meas))),
-                         err_cv=float(np.hypot(*(mine - cv_p[i])))))
+    if not rows:
+        raise SystemExit("no trackable corners found")
 
     with open(f"{args.out}/{name}_points.csv", "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0]))

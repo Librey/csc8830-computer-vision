@@ -58,6 +58,22 @@ python sfm_book.py --images images --out results
 
 Result, with only the 14.5 cm width used for scale: length 20.05 cm (true 20.0 cm), corner angles 89.5° to 90.4°, mean reprojection error 0.68 px.
 
+## Web app
+
+Module 6 has three pages in the course web app (run `streamlit run streamlit_app.py` from the repo root):
+
+| Page | What you can do |
+|---|---|
+| Optical flow | Scrub through the flow of either sample clip, or upload your own video |
+| Lucas–Kanade tracking | Rerun the A.4 validation on the report's frame pairs or two uploaded frames, and see the 5×5 hand calculation for any point |
+| Structure from motion | Rerun the book reconstruction and change the assumed focal length to see the result distort |
+
+The pages import the scripts in this folder (`validate_pair()` in `lk_validate.py`, `run()` in `sfm_book.py`), so they produce the same numbers as the command line. `web_samples/` holds the two 6-second sample clips and the two lossless frame pairs used in the report.
+
+## Reproducibility
+
+The committed outputs (`part_a/output`, `part_a/figures`, `part_a/validation`, `part_b/results`) are the ones in the report, made with OpenCV 4.13. Other OpenCV versions decode video and sample RANSAC differently, so a rerun can shift the numbers slightly (for example 16 instead of 14 moving regions in figure 1, or a recovered length of 20.06 instead of 20.05 cm). The conclusions do not change.
+
 ## Report
 
 The full report with derivations, worked calculations and references is submitted as a PDF in Google Classroom.

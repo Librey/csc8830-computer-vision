@@ -27,5 +27,10 @@ pages = {
         st.Page("app_pages/m4_q2_thermal.py", title="Q2: Human boundary, thermal", icon="🌡️"),
         st.Page("app_pages/m4_q3_fourier.py", title="Q3: Fourier-domain edges", icon="〰️"),
     ],
+    "Module 6": [
+        st.Page("app_pages/m6_flow.py", title="Optical flow", icon="🌊"),
+        st.Page("app_pages/m6_tracking.py", title="Lucas–Kanade tracking", icon="🎯"),
+        st.Page("app_pages/m6_sfm.py", title="Structure from motion", icon="📐"),
+    ],
 }
 st.navigation(pages).run()
